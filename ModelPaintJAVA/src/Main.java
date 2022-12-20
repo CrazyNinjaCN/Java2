@@ -18,7 +18,7 @@ public class Main {
     private static float[] lightPosition = {-2.19f, 1.36f, 11.45f, 1f};
     private static int DisplayList;
 
-    private static final String MODEL_LOCATION = "res/models/chertesh.obj";
+    private static final String MODEL_LOCATION = "res/models/bunny.obj";
 
     public static void main(String[] args) {
         setUpDisplay();

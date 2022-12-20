@@ -80,7 +80,7 @@ public class Model {
                     '}';
         }
 
-        /** Between 0 and 1000. */
+
         public float specularCoefficient = 100;
         public float[] ambientColour = {0.2f, 0.2f, 0.2f};
         public float[] diffuseColour = {0.3f, 1, 1};
@@ -88,7 +88,7 @@ public class Model {
         public Texture texture;
     }
 
-    /** @author Oskar */
+
     public static class Face {
 
         private final int[] vertexIndices = {-1, -1, -1};

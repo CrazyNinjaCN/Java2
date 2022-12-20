@@ -59,7 +59,7 @@ public class OBJLoader {
     public static int[] createVBO(Model model) {
         int vboVertexHandle = glGenBuffers();
         int vboNormalHandle = glGenBuffers();
-        // TODO: Implement materials with VBOs
+
         FloatBuffer vertices = reserveData(model.getFaces().size() * 9);
         FloatBuffer normals = reserveData(model.getFaces().size() * 9);
         for (Model.Face face : model.getFaces()) {
@@ -275,12 +275,7 @@ public class OBJLoader {
                     normalIndicesArray[1] = Integer.parseInt(faceIndices[2].split("/")[2]);
                     normalIndicesArray[2] = Integer.parseInt(faceIndices[3].split("/")[2]);
                 }
-                //                Vector3f vertexIndices = new Vector3f(Float.valueOf(faceIndices[1].split("/")[0]),
-                //                        Float.valueOf(faceIndices[2].split("/")[0]),
-                // Float.valueOf(faceIndices[3].split("/")[0]));
-                //                Vector3f normalIndices = new Vector3f(Float.valueOf(faceIndices[1].split("/")[2]),
-                //                        Float.valueOf(faceIndices[2].split("/")[2]),
-                // Float.valueOf(faceIndices[3].split("/")[2]));
+
                 m.getFaces().add(new Model.Face(vertexIndicesArray, normalIndicesArray,
                         textureCoordinateIndicesArray, currentMaterial));
             } else if (line.startsWith("s ")) {
