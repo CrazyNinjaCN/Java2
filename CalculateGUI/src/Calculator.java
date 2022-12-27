@@ -4,9 +4,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-//implementing ActionListener interface
+
 public class Calculator implements ActionListener {
-    //Creating variables for our calculations
     double number, answer;
     int calculation;
 
