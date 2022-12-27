@@ -37,97 +37,6 @@ public final class EulerCamera implements Camera {
         this.fov = builder.fov;
     }
 
-    public EulerCamera() {
-        this.zNear = 0.3f;
-        this.zFar = 100;
-    }
-
-    public EulerCamera(float aspectRatio) {
-        if (aspectRatio <= 0) {
-            throw new IllegalArgumentException("aspectRatio " + aspectRatio + " was 0 or was smaller than 0");
-        }
-        this.aspectRatio = aspectRatio;
-        this.zNear = 0.3f;
-        this.zFar = 100;
-    }
-
-    public EulerCamera(float aspectRatio, float x, float y, float z) {
-        this(aspectRatio);
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
-    public EulerCamera(float aspectRatio, float x, float y, float z, float pitch, float yaw, float roll) {
-        this(aspectRatio, x, y, z);
-        this.pitch = pitch;
-        this.yaw = yaw;
-        this.roll = roll;
-    }
-
-    public EulerCamera(float aspectRatio, float x, float y, float z, float pitch, float yaw, float roll, float zNear,
-                       float zFar) {
-        if (aspectRatio <= 0) {
-            throw new IllegalArgumentException("aspectRatio " + aspectRatio + " was 0 or was smaller than 0");
-        }
-        if (zNear <= 0) {
-            throw new IllegalArgumentException("zNear " + zNear + " was 0 or was smaller than 0");
-        }
-        if (zFar <= zNear) {
-            throw new IllegalArgumentException("zFar " + zFar + " was smaller or the same as zNear " + zNear);
-        }
-        this.aspectRatio = aspectRatio;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.pitch = pitch;
-        this.yaw = yaw;
-        this.roll = roll;
-        this.zNear = zNear;
-        this.zFar = zFar;
-    }
-
-    public void processMouse() {
-        final float MAX_LOOK_UP = 90;
-        final float MAX_LOOK_DOWN = -90;
-        float mouseDX = Mouse.getDX() * 0.16f;
-        float mouseDY = Mouse.getDY() * 0.16f;
-        if (yaw + mouseDX >= 360) {
-            yaw = yaw + mouseDX - 360;
-        } else if (yaw + mouseDX < 0) {
-            yaw = 360 - yaw + mouseDX;
-        } else {
-            yaw += mouseDX;
-        }
-        if (pitch - mouseDY >= MAX_LOOK_DOWN && pitch - mouseDY <= MAX_LOOK_UP) {
-            pitch += -mouseDY;
-        } else if (pitch - mouseDY < MAX_LOOK_DOWN) {
-            pitch = MAX_LOOK_DOWN;
-        } else if (pitch - mouseDY > MAX_LOOK_UP) {
-            pitch = MAX_LOOK_UP;
-        }
-    }
-
-    public void processMouse(float mouseSpeed) {
-        final float MAX_LOOK_UP = 90;
-        final float MAX_LOOK_DOWN = -90;
-        float mouseDX = Mouse.getDX() * mouseSpeed * 0.16f;
-        float mouseDY = Mouse.getDY() * mouseSpeed * 0.16f;
-        if (yaw + mouseDX >= 360) {
-            yaw = yaw + mouseDX - 360;
-        } else if (yaw + mouseDX < 0) {
-            yaw = 360 - yaw + mouseDX;
-        } else {
-            yaw += mouseDX;
-        }
-        if (pitch - mouseDY >= MAX_LOOK_DOWN && pitch - mouseDY <= MAX_LOOK_UP) {
-            pitch += -mouseDY;
-        } else if (pitch - mouseDY < MAX_LOOK_DOWN) {
-            pitch = MAX_LOOK_DOWN;
-        } else if (pitch - mouseDY > MAX_LOOK_UP) {
-            pitch = MAX_LOOK_UP;
-        }
-    }
 
     public void processMouse(float mouseSpeed, float maxLookUp, float maxLookDown) {
         float mouseDX = Mouse.getDX() * mouseSpeed * 0.16f;
@@ -145,94 +54,6 @@ public final class EulerCamera implements Camera {
             pitch = maxLookDown;
         } else if (pitch - mouseDY > maxLookUp) {
             pitch = maxLookUp;
-        }
-    }
-
-    public void processKeyboard(float delta) {
-        if (delta <= 0) {
-            throw new IllegalArgumentException("delta " + delta + " is 0 or is smaller than 0");
-        }
-
-        boolean keyUp = Keyboard.isKeyDown(Keyboard.KEY_UP) || Keyboard.isKeyDown(Keyboard.KEY_W);
-        boolean keyDown = Keyboard.isKeyDown(Keyboard.KEY_DOWN) || Keyboard.isKeyDown(Keyboard.KEY_S);
-        boolean keyLeft = Keyboard.isKeyDown(Keyboard.KEY_LEFT) || Keyboard.isKeyDown(Keyboard.KEY_A);
-        boolean keyRight = Keyboard.isKeyDown(Keyboard.KEY_RIGHT) || Keyboard.isKeyDown(Keyboard.KEY_D);
-        boolean flyUp = Keyboard.isKeyDown(Keyboard.KEY_SPACE);
-        boolean flyDown = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
-
-        if (keyUp && keyRight && !keyLeft && !keyDown) {
-            moveFromLook(delta * 0.003f, 0, -delta * 0.003f);
-        }
-        if (keyUp && keyLeft && !keyRight && !keyDown) {
-            moveFromLook(-delta * 0.003f, 0, -delta * 0.003f);
-        }
-        if (keyUp && !keyLeft && !keyRight && !keyDown) {
-            moveFromLook(0, 0, -delta * 0.003f);
-        }
-        if (keyDown && keyLeft && !keyRight && !keyUp) {
-            moveFromLook(-delta * 0.003f, 0, delta * 0.003f);
-        }
-        if (keyDown && keyRight && !keyLeft && !keyUp) {
-            moveFromLook(delta * 0.003f, 0, delta * 0.003f);
-        }
-        if (keyDown && !keyUp && !keyLeft && !keyRight) {
-            moveFromLook(0, 0, delta * 0.003f);
-        }
-        if (keyLeft && !keyRight && !keyUp && !keyDown) {
-            moveFromLook(-delta * 0.003f, 0, 0);
-        }
-        if (keyRight && !keyLeft && !keyUp && !keyDown) {
-            moveFromLook(delta * 0.003f, 0, 0);
-        }
-        if (flyUp && !flyDown) {
-            y += delta * 0.003f;
-        }
-        if (flyDown && !flyUp) {
-            y -= delta * 0.003f;
-        }
-    }
-
-    public void processKeyboard(float delta, float speed) {
-        if (delta <= 0) {
-            throw new IllegalArgumentException("delta " + delta + " is 0 or is smaller than 0");
-        }
-
-        boolean keyUp = Keyboard.isKeyDown(Keyboard.KEY_UP) || Keyboard.isKeyDown(Keyboard.KEY_W);
-        boolean keyDown = Keyboard.isKeyDown(Keyboard.KEY_DOWN) || Keyboard.isKeyDown(Keyboard.KEY_S);
-        boolean keyLeft = Keyboard.isKeyDown(Keyboard.KEY_LEFT) || Keyboard.isKeyDown(Keyboard.KEY_A);
-        boolean keyRight = Keyboard.isKeyDown(Keyboard.KEY_RIGHT) || Keyboard.isKeyDown(Keyboard.KEY_D);
-        boolean flyUp = Keyboard.isKeyDown(Keyboard.KEY_SPACE);
-        boolean flyDown = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
-
-        if (keyUp && keyRight && !keyLeft && !keyDown) {
-            moveFromLook(speed * delta * 0.003f, 0, -speed * delta * 0.003f);
-        }
-        if (keyUp && keyLeft && !keyRight && !keyDown) {
-            moveFromLook(-speed * delta * 0.003f, 0, -speed * delta * 0.003f);
-        }
-        if (keyUp && !keyLeft && !keyRight && !keyDown) {
-            moveFromLook(0, 0, -speed * delta * 0.003f);
-        }
-        if (keyDown && keyLeft && !keyRight && !keyUp) {
-            moveFromLook(-speed * delta * 0.003f, 0, speed * delta * 0.003f);
-        }
-        if (keyDown && keyRight && !keyLeft && !keyUp) {
-            moveFromLook(speed * delta * 0.003f, 0, speed * delta * 0.003f);
-        }
-        if (keyDown && !keyUp && !keyLeft && !keyRight) {
-            moveFromLook(0, 0, speed * delta * 0.003f);
-        }
-        if (keyLeft && !keyRight && !keyUp && !keyDown) {
-            moveFromLook(-speed * delta * 0.003f, 0, 0);
-        }
-        if (keyRight && !keyLeft && !keyUp && !keyDown) {
-            moveFromLook(speed * delta * 0.003f, 0, 0);
-        }
-        if (flyUp && !flyDown) {
-            y += speed * delta * 0.003f;
-        }
-        if (flyDown && !flyUp) {
-            y -= speed * delta * 0.003f;
         }
     }
 
@@ -286,20 +107,6 @@ public final class EulerCamera implements Camera {
         this.y += dy * (float) sin(toRadians(pitch - 90)) + dz * sin(toRadians(pitch));
     }
 
-    public void setPosition(float x, float y, float z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
-    public void applyOrthographicMatrix() {
-        glPushAttrib(GL_TRANSFORM_BIT);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(-aspectRatio, aspectRatio, -1, 1, 0, zFar);
-        glPopAttrib();
-    }
-
     public void applyOptimalStates() {
         if (GLContext.getCapabilities().GL_ARB_depth_clamp) {
             glEnable(GL_DEPTH_CLAMP);
@@ -324,13 +131,6 @@ public final class EulerCamera implements Camera {
         glPopAttrib();
     }
 
-    public void setRotation(float pitch, float yaw, float roll) {
-        this.pitch = pitch;
-        this.yaw = yaw;
-        this.roll = roll;
-    }
-
-
     public float x() {
         return x;
     }
@@ -343,53 +143,6 @@ public final class EulerCamera implements Camera {
 
     public float z() {
         return z;
-    }
-
-
-    public float pitch() {
-        return pitch;
-    }
-
-
-    public float yaw() {
-        return yaw;
-    }
-
-
-    public float roll() {
-        return roll;
-    }
-
-
-    public float fieldOfView() {
-        return fov;
-    }
-
-
-    public void setFieldOfView(float fov) {
-        this.fov = fov;
-    }
-
-    @Override
-    public void setAspectRatio(float aspectRatio) {
-        if (aspectRatio <= 0) {
-            throw new IllegalArgumentException("aspectRatio " + aspectRatio + " is 0 or less");
-        }
-        this.aspectRatio = aspectRatio;
-    }
-
-    public float aspectRatio() {
-        return aspectRatio;
-    }
-
-
-    public float nearClippingPane() {
-        return zNear;
-    }
-
-
-    public float farClippingPane() {
-        return zFar;
     }
 
     @Override
@@ -421,25 +174,6 @@ public final class EulerCamera implements Camera {
             return this;
         }
 
-
-        public Builder setNearClippingPane(float nearClippingPane) {
-            if (nearClippingPane <= 0) {
-                throw new IllegalArgumentException("nearClippingPane " + nearClippingPane + " is 0 or less");
-            }
-            this.zNear = nearClippingPane;
-            return this;
-        }
-
-
-        public Builder setFarClippingPane(float farClippingPane) {
-            if (farClippingPane <= 0) {
-                throw new IllegalArgumentException("farClippingPane " + farClippingPane + " is 0 or less");
-            }
-            this.zFar = farClippingPane;
-            return this;
-        }
-
-
         public Builder setFieldOfView(float fov) {
             this.fov = fov;
             return this;
@@ -452,15 +186,6 @@ public final class EulerCamera implements Camera {
             this.z = z;
             return this;
         }
-
-
-        public Builder setRotation(float pitch, float yaw, float roll) {
-            this.pitch = pitch;
-            this.yaw = yaw;
-            this.roll = roll;
-            return this;
-        }
-
 
         public EulerCamera build() {
             if (zFar <= zNear) {

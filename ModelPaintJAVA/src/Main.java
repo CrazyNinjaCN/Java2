@@ -125,7 +125,7 @@ public class Main {
             Display.setTitle("Project");
             Display.create();
         } catch (LWJGLException e) {
-            System.err.println("The display wasn't initialized correctly. :(");
+            System.err.println("Error(");
             Display.destroy();
             System.exit(1);
         }
